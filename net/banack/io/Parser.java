@@ -2,22 +2,22 @@ package net.banack.io;
 
 import java.io.Reader;
 import java.io.BufferedReader;
+import java.io.PushbackReader;
 import java.io.IOException;
 import net.banack.util.MethodNotImplementedException;
+import net.banack.util.Stack;
 
 //very primitive...
 
 public class Parser
 {		
-	private BufferedReader myInp;
+	private PushbackReader myInp;
 	private char nextChar;
-	private boolean isNextCharValid;
 	
 	
 	public Parser(Reader r)
 	{
-		myInp=new BufferedReader(r);
-		isNextCharValid = false;
+		myInp=new PushbackReader(r);
 	}
 	
 	//Reads the next integer from the Stream, base 10, discarding any other characters it encounters
@@ -28,7 +28,7 @@ public class Parser
 		int state=0;
 		boolean isNegative=false;
 		
-		fillNextChar();
+		readChar();
 		
 		while(true)
 		{
@@ -61,6 +61,7 @@ public class Parser
 						oup += nextChar - '0';
 						readChar();
 					}
+					myInp.unread(nextChar);
 					if(isNegative)
 						oup=-oup;
 				return oup;
@@ -73,20 +74,10 @@ public class Parser
 		return '0' <= c && c <= '9';
 	}
 	
-	//make sure we have a char in nextChar
-	private void fillNextChar() throws IOException
-	{
-		if(isNextCharValid)
-			return;
-		
-		readChar();
-	}
-	
 	//put a new char in nextChar
 	private void readChar() throws IOException
 	{
 		nextChar=(char)myInp.read();
-		isNextCharValid=true;
 	}
 	
 	public int[] parseIntArray(int size) throws IOException
@@ -110,8 +101,7 @@ public class Parser
 	
 	public char parseChar() throws IOException
 	{
-		fillNextChar();
-		isNextCharValid=false;
+		readChar();
 		return nextChar;
 	}
 			
@@ -119,7 +109,7 @@ public class Parser
 	public String parseWord() throws IOException
 	{
 		StringBuffer oup = new StringBuffer();
-		fillNextChar();
+		readChar();
 		while(Character.isWhitespace(nextChar))
 		{
 			readChar();
@@ -130,16 +120,55 @@ public class Parser
 			oup.append(nextChar);
 			readChar();
 		}
-		
+		myInp.unread(nextChar);
 		return oup.toString();	
 	}
 	
+	public String[] readWords() throws IOException
+	{
+		Stack oup = new Stack();
+		StringBuffer cur = new StringBuffer();
+
+		readChar();
+		
+		while(nextChar != '\n')
+		{
+			cur.setLength(0);
+			while(Character.isWhitespace(nextChar) && nextChar != '\n')
+			{
+				readChar();
+			}
+			if(nextChar == '\n')
+				break;
+			
+			while(!Character.isWhitespace(nextChar))
+			{
+				cur.append(nextChar);
+				readChar();
+			}
+			oup.push(cur);
+		}
+		
+		String[] sOup = new String[oup.size()];
+		for(int x=sOup.length-1;x>=0;x--)
+		{
+			sOup[x] = (String)oup.pop();
+		}
+		
+		return sOup;
+	}
+		
+	
 	public String readLine() throws IOException
 	{
-		//HACK
-		//if nextChar is an endline, this'll not do what you expect
-		//but I'm feeling lazy
-		isNextCharValid=false;
-		return nextChar+ myInp.readLine();
+		StringBuffer oup = new StringBuffer();
+		readChar();
+		while(nextChar != '\n')
+		{
+			oup.append(nextChar);
+			readChar();
+		}
+		
+		return oup.toString();
 	}	
 }
