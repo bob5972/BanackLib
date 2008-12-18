@@ -11,8 +11,8 @@ import net.banack.util.Stack;
 
 public class Parser
 {		
-	private PushbackReader myInp;
-	private char nextChar;
+	protected PushbackReader myInp;
+	protected char nextChar;
 	
 	
 	public Parser(Reader r)
@@ -21,14 +21,14 @@ public class Parser
 	}
 	
 	//Reads the next integer from the Stream, base 10, discarding any other characters it encounters
-	public int parseInt() throws IOException
+	public int readInt() throws IOException
 	{
 		int oup = 0;
 		
 		int state=0;
 		boolean isNegative=false;
 		
-		readChar();
+		fillChar();
 		
 		while(true)
 		{
@@ -37,7 +37,7 @@ public class Parser
 				case 0: //bad char
 					while(nextChar != '-' && !isDigit(nextChar))
 					{
-						readChar();
+						fillChar();
 					}
 					if(nextChar == '-')
 						state =1;
@@ -45,7 +45,7 @@ public class Parser
 						state = 2;
 				break;
 				case 1: //found '-'
-					readChar();
+					fillChar();
 					if(!isDigit(nextChar))
 						state=0;
 					else
@@ -59,7 +59,7 @@ public class Parser
 					{
 						oup*=10;
 						oup += nextChar - '0';
-						readChar();
+						fillChar();
 					}
 					myInp.unread(nextChar);
 					if(isNegative)
@@ -69,56 +69,56 @@ public class Parser
 		}		
 	}
 	
-	private boolean isDigit(char c)
+	protected static boolean isDigit(char c)
 	{
 		return '0' <= c && c <= '9';
 	}
 	
 	//put a new char in nextChar
-	private void readChar() throws IOException
+	protected void fillChar() throws IOException
 	{
 		nextChar=(char)myInp.read();
 	}
 	
-	public int[] parseIntArray(int size) throws IOException
+	public int[] readIntArray(int size) throws IOException
 	{
 		int[] oup = new int[size];
 		
 		for(int x=0;x<size;x++)
 		{
-			oup[x] = parseInt();
+			oup[x] = readInt();
 		}
 		return oup;
 	}
 	
-	public void parseIntArray(int[] a) throws IOException
+	public void readIntArray(int[] a) throws IOException
 	{
 		for(int x=0;x<a.length;x++)
 		{
-			a[x] = parseInt();
+			a[x] = readInt();
 		}
 	}
 	
-	public char parseChar() throws IOException
+	public char readChar() throws IOException
 	{
-		readChar();
+		fillChar();
 		return nextChar;
 	}
 			
 	
-	public String parseWord() throws IOException
+	public String readWord() throws IOException
 	{
 		StringBuffer oup = new StringBuffer();
-		readChar();
+		fillChar();
 		while(Character.isWhitespace(nextChar))
 		{
-			readChar();
+			fillChar();
 		}
 		
 		while(!Character.isWhitespace(nextChar))
 		{
 			oup.append(nextChar);
-			readChar();
+			fillChar();
 		}
 		myInp.unread(nextChar);
 		return oup.toString();	
@@ -126,49 +126,123 @@ public class Parser
 	
 	public String[] readWords() throws IOException
 	{
-		Stack oup = new Stack();
-		StringBuffer cur = new StringBuffer();
-
-		readChar();
+		String line = readLine();
 		
-		while(nextChar != '\n')
+		return parseWords(line);
+	}
+	
+	//reads num words
+	public String[] readWords(int num) throws IOException
+	{
+		String[] oup = new String[num];
+		for(int x=0;x<num;x++)
 		{
-			cur.setLength(0);
-			while(Character.isWhitespace(nextChar) && nextChar != '\n')
-			{
-				readChar();
-			}
-			if(nextChar == '\n')
-				break;
-			
-			while(!Character.isWhitespace(nextChar))
-			{
-				cur.append(nextChar);
-				readChar();
-			}
-			oup.push(cur);
+			oup[x] = readWord();
 		}
-		
-		String[] sOup = new String[oup.size()];
-		for(int x=sOup.length-1;x>=0;x--)
-		{
-			sOup[x] = (String)oup.pop();
-		}
-		
-		return sOup;
+		return oup;
 	}
 		
 	
 	public String readLine() throws IOException
 	{
 		StringBuffer oup = new StringBuffer();
-		readChar();
+		fillChar();
 		while(nextChar != '\n')
 		{
 			oup.append(nextChar);
-			readChar();
+			fillChar();
 		}
 		
 		return oup.toString();
-	}	
+	}
+	
+	//parse a string into it's whitespace seperated tokens
+	public static String[] parseWords(String line)
+	{
+		StringBuffer cur = new StringBuffer();
+		Stack oup = new Stack();
+		
+		int x = 0;
+		int len = line.length();
+		
+		while(x < len)
+		{
+			cur.setLength(0);
+			while(x< len && Character.isWhitespace(line.charAt(x)))
+			{
+				x++;
+			}
+			if(x >= len)
+				break;
+			
+			while(x< len && !Character.isWhitespace(line.charAt(x)))
+			{
+				cur.append(line.charAt(x));
+				x++;
+			}
+			oup.push(cur);
+		}
+		
+		String[] sOup = new String[oup.size()];
+		for(x=sOup.length-1;x>=0;x--)
+		{
+			sOup[x] = (String)oup.pop();
+		}
+
+		return sOup;
+	}
+	
+	public static int parseInt(String text)
+	{
+		int oup = 0;
+		
+		int state=0;
+		boolean isNegative=false;
+		
+		int x =0;
+		
+		try {
+			while(true)
+			{
+				switch(state)
+				{
+					case 0: //bad char
+						while(text.charAt(x) != '-' && !isDigit(text.charAt(x)))
+						{
+							x++;
+						}
+						if(text.charAt(x) == '-')
+							state =1;
+						else //isDigit(nextChar)
+							state = 2;
+					break;
+					case 1: //found '-'
+						x++;
+						if(!isDigit(text.charAt(x)))
+							state=0;
+						else
+						{
+							state=2;
+							isNegative=true;
+						}
+					break;
+					case 2: //found #
+						while(isDigit(text.charAt(x)))
+						{
+							oup*=10;
+							oup += text.charAt(x) - '0';
+							x++;
+						}
+						if(isNegative)
+							oup=-oup;
+					return oup;
+				}
+			}
+		}
+		catch(IndexOutOfBoundsException e)
+		{
+			throw new NumberFormatException("Malformed integer");
+		}
+	}
+	
 }
