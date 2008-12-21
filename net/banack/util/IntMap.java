@@ -140,6 +140,29 @@ public class IntMap
 		
 		return myValues[i];
 	}
+	
+	//increment given key, if the key is not present, assume  a value of 0
+	//return the new value
+	public int increment(int key)
+	{
+		return increment(key,1);
+	}
+	
+	//increment given key by the given amount, if the key is not present assume a value of 0
+	//return the new value
+	public int increment(int key, int amount)
+	{
+		int i = findKey(key);
+		if(i==-1)
+		{
+			put(key,amount);
+			return amount;
+		}
+		
+		myValues[i] += amount;
+		return myValues[i];
+		
+	}
 
 	//Tests if this hashtable maps no keys to values.
 	public boolean isEmpty()
