@@ -1,6 +1,6 @@
 package net.banack.geometry;
 
-public class DDimension
+public final class DDimension
 { 
 	public double width, height;
 	
@@ -21,17 +21,5 @@ public class DDimension
 	public double getHeight()
 	{
 		return height;
-	}
-	
-	
-	public void setWidth(double w)
-	{
-		width = w;
-	}
-	
-	
-	public void setHeight(double h)
-	{
-		height = h;
-	}
+	}	
 }

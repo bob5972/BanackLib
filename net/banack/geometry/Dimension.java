@@ -1,6 +1,6 @@
 package net.banack.geometry;
 
-public class Dimension
+public final class Dimension
 {
 	public int width,height;
 	
@@ -18,15 +18,5 @@ public class Dimension
 	public int getHeight()
 	{
 		return height;
-	}
-	
-	public void setWidth(int w)
-	{
-		width=w;
-	}
-	
-	public void setHeight(int h)
-	{
-		height=h;
 	}
 }

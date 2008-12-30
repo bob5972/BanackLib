@@ -6,8 +6,8 @@ public class Point
 	
 	public Point(DPoint p)
 	{
-		x = (int)p.x;
-		y=(int)p.y;
+		x = (int)p.getX();
+		y=(int)p.getY();
 	}
 	
 	public Point(int xc, int yc)
@@ -33,18 +33,8 @@ public class Point
 		return x;
 	}
 
-	public void setX(int x)
-	{
-		this.x = x;
-	}
-
 	public int getY()
 	{
 		return y;
-	}
-
-	public void setY(int y)
-	{
-		this.y = y;
 	}
 }

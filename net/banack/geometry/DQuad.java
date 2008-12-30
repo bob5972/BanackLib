@@ -2,7 +2,7 @@ package net.banack.geometry;
 
 import java.util.Iterator;
 
-public class DQuad
+public final class DQuad
 {
 	private DPoint p1, p2, p3, p4;
 	
@@ -14,16 +14,15 @@ public class DQuad
 		this.p3 = p3;
 		this.p4 = p4;
 	}
-
+	
+	public DQuad(DQuad r)
+	{
+		this(r.p1,r.p2,r.p3,r.p4);
+	}
 
 	public DPoint getP1()
 	{
 		return p1;
-	}
-
-	public void setP1(DPoint p1)
-	{
-		this.p1 = p1;
 	}
 
 	public DPoint getP2()
@@ -31,29 +30,14 @@ public class DQuad
 		return p2;
 	}
 
-	public void setP2(DPoint p2)
-	{
-		this.p2 = p2;
-	}
-
 	public DPoint getP3()
 	{
 		return p3;
 	}
 
-	public void setP3(DPoint p3)
-	{
-		this.p3 = p3;
-	}
-
 	public DPoint getP4()
 	{
 		return p4;
-	}
-
-	public void setP4(DPoint p4)
-	{
-		this.p4 = p4;
 	}
 
 	public DPoint getVertex(int n)
@@ -89,7 +73,5 @@ public class DQuad
 				throw new UnsupportedOperationException();
 			}
 		};
-	}
-	
-	
+	}	
 }

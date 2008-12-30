@@ -1,8 +1,8 @@
 package net.banack.geometry;
 
-public class DPoint
+public final class DPoint
 {
-	public double x,y;
+	private double x,y;
 	
 	public DPoint()
 	{
@@ -27,21 +27,11 @@ public class DPoint
 		return x;
 	}
 
-	public void setX(double x)
-	{
-		this.x = x;
-	}
-
 	public double getY()
 	{
 		return y;
 	}
 
-	public void setY(double y)
-	{
-		this.y = y;
-	}
-	
 	public DPoint add(DPoint p)
 	{
 		return new DPoint(x+p.x,y+p.y);
