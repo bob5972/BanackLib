@@ -1,7 +1,7 @@
 package net.banack.geometry;
 
 public class DDimension
-{
+{ 
 	public double width, height;
 	
 	
