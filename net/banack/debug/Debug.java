@@ -168,6 +168,14 @@ public class Debug
 		crash(new Exception(msg));
 	}
 	
+	public static void crash(Exception e, String msg)
+	{
+		stdOutPrint(msg);
+		stdErrPrint(msg);
+		logPrint(msg);
+		crash(e);
+	}
+	
 	public static void crash(Exception e)
 	{
 		e.printStackTrace();
