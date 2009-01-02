@@ -7,7 +7,11 @@ import java.io.PrintWriter;
 public class Debug
 {
 	private static boolean DEBUG=false;
-	private static boolean CRASH_ON_ERROR=false;
+	public static boolean CRASH_ON_ERROR=false;
+	
+	public static boolean STACK_TRACE_ON_INFO=false;
+	public static boolean STACK_TRACE_ON_WARN=true;
+	public static boolean STACK_TRACE_ON_ERROR=true;
 	
 	public static boolean STD_OUT_MESSAGES=false;
 	public static boolean STD_OUT_MESSAGES_INFO=false;
@@ -16,12 +20,12 @@ public class Debug
 	
 	public static boolean STD_ERR_MESSAGES=false;
 	public static boolean STD_ERR_MESSAGES_INFO=false;
-	public static boolean STD_ERR_MESSAGES_WARN=false;
+	public static boolean STD_ERR_MESSAGES_WARN=true;
 	public static boolean STD_ERR_MESSAGES_ERROR=true;
 	
 	private static String LOG_FILE = "debug.log";
 
-	public static boolean LOG_MESSAGES=true;
+	public static boolean LOG_MESSAGES=false;
 	public static boolean LOG_MESSAGES_INFO=true;
 	public static boolean LOG_MESSAGES_WARN=true;
 	public static boolean LOG_MESSAGES_ERROR=true;
@@ -45,15 +49,6 @@ public class Debug
 		return DEBUG;
 	}
 	
-	public static boolean crashOnError()
-	{
-		return CRASH_ON_ERROR;
-	}
-	
-	public static void setCrashOnError(boolean b)
-	{
-		CRASH_ON_ERROR=b;
-	}
 	
 	public static void stdOutPrint(String msg)
 	{
@@ -108,7 +103,8 @@ public class Debug
 		if(LOG_MESSAGES_INFO)
 			logPrint(oup);
 		
-		printStackTrace();
+		if(STACK_TRACE_ON_INFO)
+			printStackTrace();
 	}
 	
 	public static void warn(Object message)
@@ -123,7 +119,8 @@ public class Debug
 		if(LOG_MESSAGES_WARN)
 			logPrint(oup);
 		
-		printStackTrace();
+		if(STACK_TRACE_ON_WARN)
+			printStackTrace();
 	}
 	
 	public static void error(Object message)
@@ -139,7 +136,8 @@ public class Debug
 		if(LOG_MESSAGES_ERROR)
 			logPrint(oup);
 		
-		printStackTrace();
+		if(STACK_TRACE_ON_ERROR)
+			printStackTrace();
 		
 		if(CRASH_ON_ERROR)
 		{
@@ -147,15 +145,21 @@ public class Debug
 		}
 	}
 	
-	private static void printStackTrace()
+	public static void printStackTrace()
 	{
 		Exception e = new Exception();
+		printStackTrace(e);
+	}
+	
+	public static void printStackTrace(Exception e)
+	{
 		if(STD_OUT_MESSAGES)
 			e.printStackTrace(System.out);
 		if(STD_ERR_MESSAGES)
 			e.printStackTrace(System.err);
 		if(LOG_MESSAGES)
 			e.printStackTrace(logOut);
+		
 	}
 	
 	public static void crash()
@@ -170,31 +174,33 @@ public class Debug
 	
 	public static void crash(Exception e, String msg)
 	{
+		print(msg);
+		crash(e);
+	}
+	
+	public static void print(String msg)
+	{
 		stdOutPrint(msg);
 		stdErrPrint(msg);
 		logPrint(msg);
-		crash(e);
 	}
 	
 	public static void crash(Exception e)
 	{
-		e.printStackTrace();
+		print("Crashing!");
 		String msg = e.getMessage();
 		
 		if(msg == null)
 			msg = "";
 		msg = "Fatal Error"+((msg.equals(""))?("!"):(": "+msg));
 		
-		printStackTrace();
-		
-		stdOutPrint(msg);
-		stdErrPrint(msg);
-		logPrint(msg);
+		print(msg);
+		printStackTrace(e);
 		
 		if(!STD_OUT_MESSAGES && !STD_ERR_MESSAGES && !LOG_MESSAGES)
 		{
-			e.printStackTrace();
 			System.err.println(msg);
+			e.printStackTrace();			
 		}
 		
 		System.exit(1);

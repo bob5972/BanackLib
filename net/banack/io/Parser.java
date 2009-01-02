@@ -104,6 +104,14 @@ public class Parser
 		fillChar();
 		return nextChar;
 	}
+	
+	public char readNonWhitespaceChar() throws IOException
+	{
+		fillChar();
+		while(Character.isWhitespace(nextChar))
+			fillChar();
+		return nextChar;
+	}
 			
 	
 	public String readWord() throws IOException
@@ -156,7 +164,7 @@ public class Parser
 		return oup.toString();
 	}
 	
-	//parse a string into it's whitespace seperated tokens
+	//parse a string into its whitespace seperated tokens
 	public static String[] parseWords(String line)
 	{
 		StringBuffer cur = new StringBuffer();
@@ -180,13 +188,13 @@ public class Parser
 				cur.append(line.charAt(x));
 				x++;
 			}
-			oup.push(cur);
+			oup.push(cur.toString());
 		}
 		
 		String[] sOup = new String[oup.size()];
 		for(x=sOup.length-1;x>=0;x--)
 		{
-			sOup[x] = (String)oup.pop();
+			sOup[x] = (String)(oup.pop());
 		}
 
 		return sOup;
@@ -207,10 +215,12 @@ public class Parser
 				switch(state)
 				{
 					case 0: //bad char
-						while(text.charAt(x) != '-' && !isDigit(text.charAt(x)))
+						while(x<text.length() && text.charAt(x) != '-' && !isDigit(text.charAt(x)))
 						{
 							x++;
 						}
+						if(x>=text.length())
+							throw new IndexOutOfBoundsException();//cheap goto
 						if(text.charAt(x) == '-')
 							state =1;
 						else //isDigit(nextChar)
@@ -218,6 +228,8 @@ public class Parser
 					break;
 					case 1: //found '-'
 						x++;
+						if(x>=text.length())
+							throw new IndexOutOfBoundsException();//cheap goto
 						if(!isDigit(text.charAt(x)))
 							state=0;
 						else
@@ -232,6 +244,8 @@ public class Parser
 							oup*=10;
 							oup += text.charAt(x) - '0';
 							x++;
+							if(x>=text.length())
+								break;
 						}
 						if(isNegative)
 							oup=-oup;
@@ -241,7 +255,7 @@ public class Parser
 		}
 		catch(IndexOutOfBoundsException e)
 		{
-			throw new NumberFormatException("Malformed integer");
+			throw new NumberFormatException("Malformed integer: "+text);
 		}
 	}
 	
