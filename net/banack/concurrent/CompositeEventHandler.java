@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class CompositeEventHandler implements EventHandler
 {
-	private ArrayList eh;
+	private ArrayList<EventHandler> eh;
 	
 	public CompositeEventHandler()
 	{
 		//I'm not expecting to get too many childrens
-		eh = new ArrayList(4);
+		eh = new ArrayList<EventHandler>(4);
 	}
 	
 	public void add(EventHandler e)

@@ -37,4 +37,28 @@ public final class DPoint
 		return new DPoint(x+p.x,y+p.y);
 	}
 	
+	public boolean equals(Object o)
+	{
+		if(this == o)
+			return true;
+		if(!(o instanceof DPoint))
+			return false;
+		DPoint p = (DPoint)o;
+		
+		if(p.x == x && p.y == y)
+			return true;
+		return false;
+	}
+	
+	public int hashCode()
+	{
+		//very bad hashing, but works for now
+		return (int)(x*y);
+	}
+	
+	public String toString()
+	{
+		return "( "+x+","+y+"+ )";
+	}
+	
 }

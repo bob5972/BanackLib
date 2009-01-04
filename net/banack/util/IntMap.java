@@ -265,7 +265,7 @@ public class IntMap
 	public static void debugTest()
 	{
 		IntMap map = new IntMap();
-		HashMap oracle = new HashMap();
+		HashMap<Integer,Integer> oracle = new HashMap<Integer,Integer>();
 		java.util.Random r = new java.util.Random(101);
 		boolean fail = false;
 		

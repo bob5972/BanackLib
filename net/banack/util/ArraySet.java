@@ -8,7 +8,7 @@ import java.util.Collection;
  * 
  * @author Michael Banack
  */
-public class ArraySet extends AbstractSet
+public class ArraySet<E> extends AbstractSet<E>
 {
 	private static final int DEFAULT_CAPACITY = 8;
 
@@ -44,7 +44,7 @@ public class ArraySet extends AbstractSet
 	 * Constructs a new ArraySet containing the elements of c. If two elements of c are equivalent according to their
 	 * equals method it will add one of them.
 	 */
-	public ArraySet(Collection c)
+	public ArraySet(Collection<E> c)
 	{
 		this(c.size());
 
@@ -216,7 +216,7 @@ public class ArraySet extends AbstractSet
 	/**
 	 * @see java.util.Collection#iterator()
 	 */
-	public java.util.Iterator iterator()
+	public java.util.Iterator<E> iterator()
 	{
 		return new ArraySetIterator();
 	}
