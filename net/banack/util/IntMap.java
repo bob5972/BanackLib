@@ -256,7 +256,7 @@ public class IntMap
 	}
 		
 
-	//Returns the number of keys in this hashtable.
+	//Returns the number of keys in this hash table.
 	public int size()
 	{
 		return mySize;

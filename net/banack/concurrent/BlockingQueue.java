@@ -8,9 +8,9 @@ import net.banack.util.EmptyQueueException;
  * 
  * @author Michael Banack
  */
-public class BlockingQueue
+public class BlockingQueue<V>
 {
-	private Queue myQueue;
+	private Queue<V> myQueue;
 
 
 	private int myWaitingCount;
@@ -18,7 +18,7 @@ public class BlockingQueue
 	public BlockingQueue()
 	{
 		super();
-		myQueue = new Queue();
+		myQueue = new Queue<V>();
 
 		myWaitingCount = 0;
 	}
@@ -42,7 +42,7 @@ public class BlockingQueue
 	/**
 	 * Inserts the given object into the queue.
 	 */
-	public synchronized void enqueue( Object e )
+	public synchronized void enqueue( V e )
 	{
 		myQueue.enqueue(e);
 		if (myWaitingCount > 0)
@@ -51,15 +51,15 @@ public class BlockingQueue
 
 	/**
 	 * Waits until an object is in the queue, and then removes it. No guarantee
-	 * is made about the order in which blocked threads receive incomming
-	 * elements. In fact, an incomming element may be removed by a call to
+	 * is made about the order in which blocked threads receive incoming
+	 * elements. In fact, an incoming element may be removed by a call to
 	 * makeEmpty() or dequeueNow() before a blocked thread gets it.
 	 * 
 	 * @return The object that was removed from the queue.
 	 */
-	public synchronized Object waitAndDequeue() throws InterruptedException
+	public synchronized V waitAndDequeue() throws InterruptedException
 	{
-		Object oup;
+		V oup;
 		myWaitingCount++;
 		while (isEmpty())
 		{
@@ -78,9 +78,9 @@ public class BlockingQueue
 	 * 
 	 * @throws EmptyQueueException if the queue is empty.
 	 */
-	public synchronized Object dequeueNow()
+	public synchronized V dequeueNow()
 	{
-		Object oup;
+		V oup;
 		try
 		{
 			oup = myQueue.dequeue();

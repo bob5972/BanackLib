@@ -8,7 +8,7 @@ public class CompositeEventHandler implements EventHandler
 	
 	public CompositeEventHandler()
 	{
-		//I'm not expecting to get too many childrens
+		//I'm not expecting to get too many children
 		eh = new ArrayList<EventHandler>(4);
 	}
 	

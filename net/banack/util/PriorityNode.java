@@ -1,12 +1,14 @@
 package net.banack.util;
 
-public class PriorityNode extends MBNode {
-
+public class PriorityNode<V> extends MBNode<V> implements Comparable<PriorityNode<V> >
+{
+	
 	private int myPriority;
 	
-	public PriorityNode(Object x, int priority) {
+	public PriorityNode(V x, int priority)
+	{
 		super(x);
-		myPriority=priority;
+		myPriority = priority;
 	}
 	
 	public final int priority()
@@ -19,27 +21,28 @@ public class PriorityNode extends MBNode {
 		return myPriority;
 	}
 	
-	//Compares the priorities
-	//Two nodes with the same priorities are equal
-	public int compareTo(Object rhs)
+	// Compares the priorities
+	// Two nodes with the same priorities are equal
+	public int compareTo(PriorityNode<V> rhs)
 	{
-		//quick test for equality
-		if(this==rhs)
+		// quick test for equality
+		if (this == rhs)
 			return 0;
-		if(! (rhs instanceof PriorityNode))
+		if (!(rhs instanceof PriorityNode))
 			throw new ClassCastException("Invalid Comparison");
-		PriorityNode prhs = (PriorityNode)rhs;
-		return myPriority-prhs.myPriority;
+		PriorityNode<V> prhs = (PriorityNode<V>) rhs;
+		return myPriority - prhs.myPriority;
 	}
 	
-	//Two nodes with the same priorities are equal
+	// Two nodes with the same priorities are equal
+	@SuppressWarnings("unchecked")
 	public boolean equals(Object obj)
 	{
-		if(this==obj)
+		if (this == obj)
 			return true;
 		
-		if(! (obj instanceof PriorityNode))
+		if (!(obj instanceof PriorityNode))
 			return false;
-		return this.compareTo(obj)==0;
+		return this.compareTo((PriorityNode<V>)obj) == 0;
 	}
 }

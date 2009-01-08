@@ -27,7 +27,7 @@ public class ArraySet<E> extends AbstractSet<E>
 	}
 
 	/**
-	 * Constructs a new ArraySet with the specificed initial capacity.
+	 * Constructs a new ArraySet with the specified initial capacity.
 	 */
 	public ArraySet(int initialCapacity)
 	{
@@ -51,10 +51,8 @@ public class ArraySet<E> extends AbstractSet<E>
 		addAll(c);
 	}
 
-	/**
-	 * @see java.util.Set#add(java.lang.Object)
-	 */
-	public boolean add(Object o)
+
+	public boolean add(E o)
 	{
 		if (o == null)
 			throw new NullPointerException();
@@ -70,9 +68,7 @@ public class ArraySet<E> extends AbstractSet<E>
 		return true;
 	}
 
-	/**
-	 * @see java.util.Set#remove(java.lang.Object)
-	 */
+
 	public boolean remove(Object o)
 	{
 		if (o == null)
@@ -96,10 +92,7 @@ public class ArraySet<E> extends AbstractSet<E>
 		myStuff = oup;
 	}
 
-	/**
-	 * @see java.util.Set#containsAll(java.util.Collection)
-	 */
-	public boolean containsAll(Collection c)
+	public boolean containsAll(Collection<?> c)
 	{
 		//"Logic is the beginning of wisdom...not the end." Spock (Star Trek VI)
 		if(c.size()>mySize)
@@ -108,9 +101,6 @@ public class ArraySet<E> extends AbstractSet<E>
 		return super.containsAll(c);
 	}
 
-	/**
-	 * @see java.util.Set#contains(java.lang.Object)
-	 */
 	public boolean contains(Object o)
 	{
 		for (int x = 0; x < mySize; x++) {
@@ -139,7 +129,7 @@ public class ArraySet<E> extends AbstractSet<E>
 	/**
 	 * @see java.util.Set#retainAll(java.util.Collection)
 	 */
-	public boolean retainAll(Collection c)
+	public boolean retainAll(Collection<?> c)
 	{
 		boolean oup = false;
 		for (int x = 0; x < mySize; x++) {
@@ -155,7 +145,7 @@ public class ArraySet<E> extends AbstractSet<E>
 	/**
 	 * @see java.util.Set#removeAll(java.util.Collection c)
 	 */
-	public boolean removeAll(Collection c)
+	public boolean removeAll(Collection<?> c)
 	{
 		boolean oup = false;
 		for (int x = 0; x < mySize; x++) {
@@ -194,11 +184,12 @@ public class ArraySet<E> extends AbstractSet<E>
 	 * 
 	 * @return The item at position i.
 	 */
-	public Object get(int i)
+	@SuppressWarnings("unchecked")
+	public E get(int i)
 	{
 		if (i > mySize || i < 0)
 			throw new java.util.NoSuchElementException();
-		return myStuff[i];
+		return (E)myStuff[i];
 	}
 
 	/**
@@ -221,7 +212,7 @@ public class ArraySet<E> extends AbstractSet<E>
 		return new ArraySetIterator();
 	}
 
-	private class ArraySetIterator implements java.util.Iterator
+	private class ArraySetIterator implements java.util.Iterator<E>
 	{
 		private int myPos;
 
@@ -242,12 +233,13 @@ public class ArraySet<E> extends AbstractSet<E>
 			return myPos < mySize;
 		}
 
-		public Object next()
+		@SuppressWarnings("unchecked")
+		public E next()
 		{
 			checkModCount();
 			if (hasNext()) {
 				canRemove = true;
-				return myStuff[myPos++];
+				return (E)myStuff[myPos++];
 			} else
 				throw new java.util.NoSuchElementException();
 		}

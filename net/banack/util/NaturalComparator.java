@@ -2,20 +2,17 @@ package net.banack.util;
 
 import java.util.Comparator;
 
-public final class NaturalComparator implements Comparator {
+public final class NaturalComparator<E extends Comparable<E> > implements Comparator<E>
+{
 
 	public NaturalComparator()
 	{
 		
 	}
 	
-	public int compare(Object o1, Object o2)
+	public int compare(E o1, E o2)
 	{
-		Comparable c1,c2;
-		c1 =(Comparable)o1; 
-		c2 =(Comparable)o2;
-
-		return c1.compareTo(c2);
+		return o1.compareTo(o2);
 	}
 	
 	public boolean equals(Object obj)

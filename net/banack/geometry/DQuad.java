@@ -56,15 +56,15 @@ public final class DQuad
 		throw new IllegalArgumentException("Bad n value of "+n);
 	}
 	
-	public Iterator iterator()
+	public Iterator<DPoint> iterator()
 	{
-		return new Iterator(){
+		return new Iterator<DPoint>(){
 			private int n=1;
 			public boolean hasNext(){
 				return n<=4;
 			}
 			
-			public Object next()
+			public DPoint next()
 			{
 				return getVertex(n++);
 			}

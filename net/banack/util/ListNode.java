@@ -6,38 +6,38 @@ package net.banack.util;
  * @author Michael Banack
  */
 
-public class ListNode extends MBNode {
-	private ListNode myNext;
+public class ListNode<V> extends MBNode<V> {
+	private ListNode<V> myNext;
 
 	public ListNode() {
 		super();
 		myNext = null;
 	}
 
-	public ListNode(Object x) {
+	public ListNode(V x) {
 		super(x);
 		myNext = null;
 	}
 
-	public ListNode(Object x, ListNode n) {
+	public ListNode(V x, ListNode<V> n) {
 		super(x);
 		myNext = n;
 	}
 
-	public ListNode(ListNode n) {
+	public ListNode(ListNode<V> n) {
 		super();
 		myNext = n;
 	}
 
-	public final ListNode next() {
+	public final ListNode<V> next() {
 		return getNext();
 	}
 	
-	public ListNode getNext() {
+	public ListNode<V> getNext() {
 		return myNext;
 	}
 
-	public void setNext(ListNode x) {
+	public void setNext(ListNode<V> x) {
 		myNext = x;
 	}
 

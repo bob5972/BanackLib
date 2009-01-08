@@ -6,26 +6,26 @@ package net.banack.util;
  * @author Michael Banack
  */
 
-public class MBNode {
-	private Object myValue;
+public class MBNode<E> {
+	private E myValue;
 
 	public MBNode() {
 		myValue = null;
 	}
 
-	public MBNode(Object x) {
+	public MBNode(E x) {
 		myValue = x;
 	}
 
-	public final Object value() {
+	public final E value() {
 		return getValue();
 	}
 
-	public Object getValue() {
+	public E getValue() {
 		return myValue;
 	}
 
-	public void setValue(Object x) {
+	public void setValue(E x) {
 		myValue = x;
 	}
 

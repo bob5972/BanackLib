@@ -6,8 +6,8 @@ package net.banack.util;
  * @author Michael Banack
  */
 
-public class TreeNode extends MBNode {
-	private TreeNode myLeft, myRight;
+public class TreeNode<V> extends MBNode<V> {
+	private TreeNode<V> myLeft, myRight;
 
 	public TreeNode() {
 		super();
@@ -15,37 +15,37 @@ public class TreeNode extends MBNode {
 		myRight = null;
 	}
 
-	public TreeNode(Object x) {
+	public TreeNode(V x) {
 		super(x);
 		myLeft = null;
 		myRight = null;
 	}
 
-	public TreeNode(Object x, TreeNode left, TreeNode right) {
+	public TreeNode(V x, TreeNode<V> left, TreeNode<V> right) {
 		super(x);
 		myLeft = left;
 		myRight = right;
 	}
 
-	public TreeNode(TreeNode left, TreeNode right) {
+	public TreeNode(TreeNode<V> left, TreeNode<V> right) {
 		super();
 		myLeft = left;
 		myRight = right;
 	}
 	
-	public MBNode leftChild() {
+	public MBNode<V> leftChild() {
 		return myLeft;
 	}
 
-	public MBNode rightChild() {
+	public MBNode<V> rightChild() {
 		return myRight;
 	}
 
-	public void setLeft(TreeNode x) {
+	public void setLeft(TreeNode<V> x) {
 		myLeft = x;
 	}
 
-	public void setRight(TreeNode x) {
+	public void setRight(TreeNode<V> x) {
 		myRight = x;
 	}
 

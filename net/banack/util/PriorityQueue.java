@@ -8,7 +8,8 @@ import java.util.Comparator;
  * @author Michael Banack
  * @version 1.0
  */
-public class PriorityQueue {
+public class PriorityQueue<K>
+{
 	// instance variables
 	private int mySize;// current size of the heap
 
@@ -19,18 +20,19 @@ public class PriorityQueue {
 
 	private static int ROOT = 0;
 	
-	private Comparator myComp;
+	private Comparator<K> myComp;
 
 	/**
 	 * Constructs an empty heap.
 	 */
+	@SuppressWarnings("unchecked")
 	public PriorityQueue() {
 		myArray = new Object[DEFAULT_SIZE];
 		mySize = 0;
 		myComp=new NaturalComparator();
 	}
 
-	public PriorityQueue(Comparator c) {
+	public PriorityQueue(Comparator<K> c) {
 		this();
 		myComp=c;
 	}
@@ -48,15 +50,17 @@ public class PriorityQueue {
 	}
 
 	// returns the entry with the smallest key
-	public Object getMin()
+	@SuppressWarnings("unchecked")
+	public K getMin()
 	{
-		return myArray[ROOT];
+		return (K)myArray[ROOT];
 	}
 
 	// returns and deletes the entry with the smallest Key
-	public Object removeMin()
+	@SuppressWarnings("unchecked")
+	public K removeMin()
 	{
-		Object oup = myArray[ROOT]; // output value
+		K oup = (K)myArray[ROOT]; // output value
 		myArray[ROOT] = myArray[mySize-1];
 		myArray[mySize-1] = null;//get rid of the duplicate reference to help the garbage collector out later
 		mySize--;
@@ -73,7 +77,7 @@ public class PriorityQueue {
 	}
 	
 	// adds a new entry to the heap
-	public void insert(Object e)
+	public void insert(K e)
 	{
 		if (myArray.length == mySize) {
 			Object[] temp = myArray;
@@ -96,16 +100,17 @@ public class PriorityQueue {
 	}
 
 	// percolates down from a starting index to preserve heap order
+	@SuppressWarnings("unchecked")
 	private void percolateDown(int index)
 	{
 		while (!isLeaf(index)) {
 			int smallestChild;// the index of the smallest child of index
-			if (hasRightChild(index) && (myComp.compare(myArray[getLeftChild(index)],myArray[getRightChild(index)]) > 0))
+			if (hasRightChild(index) && (myComp.compare((K)myArray[getLeftChild(index)],(K)myArray[getRightChild(index)]) > 0))
 				smallestChild = getRightChild(index);
 			else
 				smallestChild = getLeftChild(index);
 
-			if (myComp.compare(myArray[index],myArray[smallestChild]) > 0) {
+			if (myComp.compare((K)myArray[index],(K)myArray[smallestChild]) > 0) {
 				Object temp = myArray[index];
 				myArray[index] = myArray[smallestChild];
 				myArray[smallestChild] = temp;
@@ -115,10 +120,11 @@ public class PriorityQueue {
 	}
 
 	// percolates up from a starting index to preserve heap order.
+	@SuppressWarnings("unchecked")
 	private void percolateUp(int index)
 	{
 		while (!isRoot(index)) {
-			if (myComp.compare(myArray[index],myArray[getParent(index)]) < 0) {
+			if (myComp.compare((K)myArray[index],(K)myArray[getParent(index)]) < 0) {
 				Object temp = myArray[index];
 				myArray[index] = myArray[getParent(index)];
 				myArray[getParent(index)] = temp;

@@ -168,7 +168,7 @@ public class Parser
 	public static String[] parseWords(String line)
 	{
 		StringBuffer cur = new StringBuffer();
-		Stack oup = new Stack();
+		Stack<String> oup = new Stack<String>();
 		
 		int x = 0;
 		int len = line.length();

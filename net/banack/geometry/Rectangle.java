@@ -28,15 +28,15 @@ public abstract class Rectangle
 		throw new IllegalArgumentException("Bad n value of "+n);
 	}
 	
-	public Iterator iterator()
+	public Iterator<Point> iterator()
 	{
-		return new Iterator(){
+		return new Iterator<Point>(){
 			private int n=0;
 			public boolean hasNext(){
 				return n<4;
 			}
 			
-			public Object next()
+			public Point next()
 			{
 				return getVertex(n++);
 			}

@@ -4,20 +4,20 @@ import net.banack.util.PriorityQueue;
 import java.util.Comparator;
 import net.banack.util.EmptyPQException;
 
-public class BlockingPriorityQueue
+public class BlockingPriorityQueue<K>
 {
-	private PriorityQueue pq;
+	private PriorityQueue<K> pq;
 	private int myWaitingCount;
 	
 	public BlockingPriorityQueue()
 	{
-		pq = new PriorityQueue();
+		pq = new PriorityQueue<K>();
 		myWaitingCount=0;
 	}
 	
-	public BlockingPriorityQueue(Comparator c)
+	public BlockingPriorityQueue(Comparator<K> c)
 	{
-		pq = new PriorityQueue(c);
+		pq = new PriorityQueue<K>(c);
 		myWaitingCount=0;
 	}
 	
@@ -31,9 +31,9 @@ public class BlockingPriorityQueue
 		return pq.size();
 	}
 	
-	public synchronized Object getMinNow()
+	public synchronized K getMinNow()
 	{
-		Object oup;
+		K oup;
 		try
 		{
 			oup = pq.getMin();
@@ -46,9 +46,9 @@ public class BlockingPriorityQueue
 		
 	}
 	
-	public Object waitAndGetMin() throws InterruptedException
+	public K waitAndGetMin() throws InterruptedException
 	{
-		Object oup;
+		K oup;
 		myWaitingCount++;
 		while (isEmpty())
 		{
@@ -61,7 +61,7 @@ public class BlockingPriorityQueue
 	}
 	
 	
-	public void insert(Object e)
+	public void insert(K e)
 	{
 		pq.insert(e);
 		if(myWaitingCount >0)

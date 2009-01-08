@@ -5,14 +5,14 @@ import net.banack.concurrent.CompositeEventHandler;
 public class EventThread extends Thread implements Runnable
 {
 	private CompositeEventHandler eh;
-	private BlockingQueue q;
+	private BlockingQueue<Object> q;
 	private boolean ignoreBadEvents;
 	
 	public EventThread()
 	{
 		super();
 		eh = new CompositeEventHandler();
-		q = new BlockingQueue();
+		q = new BlockingQueue<Object>();
 		ignoreBadEvents=false;
 		setDaemon(true);
 	}

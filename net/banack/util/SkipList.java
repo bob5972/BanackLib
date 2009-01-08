@@ -16,9 +16,9 @@ import java.util.SortedSet;
  * @author Michael Banack 
  * @version 1.1
  */
-public class SkipList extends AbstractCollection implements SortedCollection
+public class SkipList<E> extends AbstractCollection<E> implements SortedCollection<E>
 {
-    private static class SkipNode extends MBNode
+    private static class SkipNode extends MBNode<Object>
     {
         //instance variables
     	public SkipNode above,below,left,right;
@@ -84,7 +84,7 @@ public class SkipList extends AbstractCollection implements SortedCollection
     private int myModificationCount;
     
     //The comparator to be used for ordering
-    private Comparator myComp;
+    private Comparator<E> myComp;
     
     //whether or not the instance allows duplicates (ie items that are .equals() to each other)
     private boolean isASet;
@@ -102,7 +102,8 @@ public class SkipList extends AbstractCollection implements SortedCollection
 
 
     //Constructs an Empty SkipList
-    public SkipList()
+    @SuppressWarnings("unchecked")
+	public SkipList()
     {
         mySize=0;
         myModificationCount=0;
@@ -128,31 +129,32 @@ public class SkipList extends AbstractCollection implements SortedCollection
     }
     
     //Constructs an empty SkipList using the specified Comparator
-    public SkipList(Comparator c)
+    public SkipList(Comparator<E> c)
     {
     	this();
     	myComp=c;
     }
     
     //Constructs a copy of list using the elements natural order
-    public SkipList(Collection list)
+    public SkipList(Collection<? extends E> list)
     {
         this();
         
        addAll(list);
     }
     
-    protected SkipList(Collection list, boolean amSet)
+    protected SkipList(Collection<? extends E> list, boolean amSet)
     {
     	isASet=amSet;
     	addAll(list);
     }
     	
     
-    //Private comparision function for the skip list
+    //Private comparison function for the skip list
     //  (takes into account the Infinity nodes on the ends)
     //Note that comparing two infinities is undefined (and might throw an exception)
-    private int compareValues(Object e1, Object e2)
+    @SuppressWarnings("unchecked")
+	private int compareValues(Object e1, Object e2)
     {
         //handles cases
         // -inf < e2 and e1 < +inf
@@ -166,7 +168,7 @@ public class SkipList extends AbstractCollection implements SortedCollection
         {
             return 1;
         }
-        return myComp.compare(e1,e2);
+        return myComp.compare((E)e1,(E)e2);
     }
 
     
@@ -194,7 +196,8 @@ public class SkipList extends AbstractCollection implements SortedCollection
     
     //returns the object at index i (in sorted order)
     //  in other words, the ith object in sorted order (starting at 0 and going to mySize-1)
-    public Object get(int i)
+    @SuppressWarnings("unchecked")
+	public E get(int i)
     {
     	if(i < 0 || i >= mySize)
     		throw new IndexOutOfBoundsException("Requested index i="+i+" is out of bounds!");
@@ -209,7 +212,7 @@ public class SkipList extends AbstractCollection implements SortedCollection
 	    		cur+=current.skipped;
 	    	}
 	    	if(cur == i)
-	    		return current.getValue();
+	    		return (E)current.getValue();
 	    	else
 	    		current=current.below;
     	}
@@ -304,7 +307,8 @@ public class SkipList extends AbstractCollection implements SortedCollection
     }
     
     // see SortedCollection.successor
-    public Object successor(Object item)
+    @SuppressWarnings("unchecked")
+	public E successor(E item)
     {
      	  SkipNode current = myTopRight;
           
@@ -324,11 +328,12 @@ public class SkipList extends AbstractCollection implements SortedCollection
           if(current.value() == POSITIVE_INFINITY)
         	  return null;
         	  
-          return current.value();
+          return (E)current.value();
      }
     
     // see SortedCollection.predecessor
-    public Object predecessor(Object item)
+    @SuppressWarnings("unchecked")
+	public E predecessor(Object item)
     {
 		SkipNode current = myTopLeft;
 		  
@@ -348,7 +353,7 @@ public class SkipList extends AbstractCollection implements SortedCollection
 		if(current.value() == NEGATIVE_INFINITY)
 			return null;
 		 
-		return current.value();
+		return (E)current.value();
 	}
 
         
@@ -359,7 +364,7 @@ public class SkipList extends AbstractCollection implements SortedCollection
         myModificationCount++;//notify the iterators of a change
         int curLevel =0;//keeps track of the current level
         
-        Stack updateStack = new Stack();
+        Stack<SkipNode> updateStack = new Stack<SkipNode>();
         
         SkipNode current=myTopLeft;
         while(current.below != null)
@@ -606,7 +611,7 @@ public class SkipList extends AbstractCollection implements SortedCollection
         }
     }
     
-    public Comparator comparator()
+    public Comparator<E> comparator()
 	{
 		if(myComp instanceof NaturalComparator)
 			return null;
@@ -614,38 +619,43 @@ public class SkipList extends AbstractCollection implements SortedCollection
 			return myComp;
 	}
 
-	public Object first()
+	public E first()
 	{
 		if(mySize==0)
 			throw new NoSuchElementException("first() called on empty SkipList!");
 		return get(0);
 	}
 
-	public SortedCollection headCollection(Object toElement)
+	public SortedCollection<E> headCollection(E toElement)
 	{
-		return subCollection(NEGATIVE_INFINITY,toElement);
+		return subCollectionHelper(NEGATIVE_INFINITY,toElement);
 	}
 
-	public Object last()
+	public E last()
 	{
 		if(isEmpty())
 			throw new NoSuchElementException("first() called on empty SkipList!");
 		return get(mySize-1);
 	}
 
-	public SortedCollection subCollection(Object fromElement, Object toElement)
+	public SortedCollection<E> subCollection(E fromElement, E toElement)
+	{
+		return subCollectionHelper(fromElement,toElement);
+	}
+	
+	private SortedCollection<E> subCollectionHelper(Object fromElement, Object toElement)
 	{
 		if(compareValues(fromElement,toElement) > 0)
 			throw new IllegalArgumentException("Requested a subCollection with fromElement > toElement!");
-		return new SubList(fromElement,toElement);
+		return new SubList<E>(fromElement,toElement);
 	}
 
-	public SortedCollection tailCollection(Object fromElement)
+	public SortedCollection<E> tailCollection(E fromElement)
 	{
-		return subCollection(fromElement, POSITIVE_INFINITY);
+		return subCollectionHelper(fromElement, POSITIVE_INFINITY);
 	}
 	
-	private class SubList extends AbstractCollection implements SortedCollection
+	private class SubList<V> extends AbstractCollection<V> implements SortedCollection<V>
 	{
 		private Object fromElement;
 		private Object toElement;
@@ -656,29 +666,37 @@ public class SkipList extends AbstractCollection implements SortedCollection
 			toElement=toE;
 		}
 		
-		public Object getFromElement()
+		@SuppressWarnings("unchecked")
+		public V getFromElement()
 		{
-			return fromElement;
+			if(fromElement == NEGATIVE_INFINITY || fromElement == POSITIVE_INFINITY)
+				return null;
+			return (V)fromElement;
 		}
 		
-		public Object getToElement()
+		@SuppressWarnings("unchecked")
+		public V getToElement()
 		{
-			return toElement;
+			if(toElement == NEGATIVE_INFINITY || toElement == POSITIVE_INFINITY)
+				return null;
+			return (V)toElement;
 		}
 
-		public Comparator comparator()
+		@SuppressWarnings("unchecked")
+		public Comparator<V> comparator()
 		{
-			return SkipList.this.comparator();
+			return (Comparator<V>) myComp;
 		}
 
-		public Object first()
+		@SuppressWarnings("unchecked")
+		public V first()
 		{
 			SkipNode n = this.firstNode();
 			
 			if(n == null)			
 				throw new NoSuchElementException("Called first() on empty sub SortedCollection!");
 			else
-				return n.value();
+				return (V)n.value();
 		}
 		
 		public SkipNode firstNode()
@@ -707,12 +725,13 @@ public class SkipList extends AbstractCollection implements SortedCollection
 			return null;
 		}
 
-		public SortedCollection headCollection(Object toElem)
+		public SortedCollection<V> headCollection(V toElem)
 		{
-			return subCollection(fromElement,toElem);
+			return subCollectionHelper(fromElement,toElem);
 		}
 
-		public Object last()
+		@SuppressWarnings("unchecked")
+		public V last()
 		{
 			SkipNode current = myTopRight;
 	          
@@ -726,13 +745,18 @@ public class SkipList extends AbstractCollection implements SortedCollection
 			if(current.left.value() != NEGATIVE_INFINITY)
 			{
 				if(compareValues(current.left.value(),fromElement) >= 0)
-					return current.left.value();
+					return (V)current.left.value();
 			}
 			      
 			throw new NoSuchElementException("Called last() on empty sub SortedCollection!");
 		}
 
-		public SortedCollection subCollection(Object fromElem, Object toElem)
+		public SortedCollection<V> subCollection(V fromElem, V toElem)
+		{
+			return subCollectionHelper(fromElem,toElem);
+		}
+		
+		public SortedCollection<V> subCollectionHelper(Object fromElem, Object toElem)
 		{
 			Object right,left;
 			right = fromElement;
@@ -743,14 +767,14 @@ public class SkipList extends AbstractCollection implements SortedCollection
 				left = toElem;
 			
 			if(isASet)
-				return new SubSet((SubList)SkipList.this.subCollection(left,right));
+				return new SubSet<V>(left,right);
 			else
-				return SkipList.this.subCollection(left,right);
+				return new SubList<V>(left,right);
 		}
 
-		public SortedCollection tailCollection(Object fromElem)
+		public SortedCollection<V> tailCollection(Object fromElem)
 		{
-			return subCollection(fromElem,toElement);
+			return subCollectionHelper(fromElem,toElement);
 		}
 
 		public boolean add(Object arg)
@@ -760,9 +784,9 @@ public class SkipList extends AbstractCollection implements SortedCollection
 			return SkipList.this.add(arg);
 		}
 
-		public boolean addAll(Collection arg)
+		public boolean addAll(Collection<? extends V> arg)
 		{
-			Iterator i = arg.iterator();
+			Iterator<?> i = arg.iterator();
 			boolean changed=false;
 			while(i.hasNext())
 			{
@@ -774,7 +798,7 @@ public class SkipList extends AbstractCollection implements SortedCollection
 
 		public void clear()
 		{
-			Iterator i = this.iterator();
+			Iterator<V> i = this.iterator();
 			while(i.hasNext())
 			{
 				SkipList.this.remove(i.next());
@@ -788,9 +812,9 @@ public class SkipList extends AbstractCollection implements SortedCollection
 			return SkipList.this.contains(arg);
 		}
 
-		public boolean containsAll(Collection arg)
+		public boolean containsAll(Collection<?> arg)
 		{
-			Iterator i = arg.iterator();
+			Iterator<?> i = arg.iterator();
 			while(i.hasNext())
 			{
 				if(!this.contains(i.next()))
@@ -825,9 +849,9 @@ public class SkipList extends AbstractCollection implements SortedCollection
 			return true;
 		}
 
-		public Iterator iterator()
+		public Iterator<V> iterator()
 		{
-			return new SkipIterator(this.firstNode(),toElement);
+			return new SkipIterator<V>(this.firstNode(),toElement);
 		}
 
 		public boolean remove(Object arg)
@@ -837,10 +861,10 @@ public class SkipList extends AbstractCollection implements SortedCollection
 			return SkipList.this.remove(arg);
 		}
 
-		public boolean removeAll(Collection arg)
+		public boolean removeAll(Collection<?> arg)
 		{
 			boolean changed=false;
-			Iterator i= arg.iterator();
+			Iterator<?> i= arg.iterator();
 			while(i.hasNext())
 			{
 				if(SkipList.this.remove(i.next()))
@@ -849,9 +873,9 @@ public class SkipList extends AbstractCollection implements SortedCollection
 			return changed;
 		}
 
-		public boolean retainAll(Collection arg)
+		public boolean retainAll(Collection<?> arg)
 		{
-			Iterator i = this.iterator();
+			Iterator<?> i = this.iterator();
 			boolean changed=false;
 			while(i.hasNext())
 			{
@@ -905,7 +929,7 @@ public class SkipList extends AbstractCollection implements SortedCollection
 
 		public Object[] toArray()
 		{
-			Stack oup = new Stack();
+			Stack<Object> oup = new Stack<Object>();
 			SkipNode current = myTopLeft;
 	          
 			current = moveRightUntilNextIsGreaterOrEqual(current,fromElement);
@@ -938,24 +962,26 @@ public class SkipList extends AbstractCollection implements SortedCollection
 			return new Object[0];
 		}
 
-		public Object predecessor(Object e)
+		@SuppressWarnings("unchecked")
+		public V predecessor(V e)
 		{
-			Object oup = SkipList.this.predecessor(e);
+			V oup = (V)SkipList.this.predecessor(e);
 			if(SkipList.this.compareValues(fromElement,oup) < 0 || SkipList.this.compareValues(oup,toElement) >= 0)
 				return null;
 			return oup;
 		}
 
-		public Object successor(Object e)
+		@SuppressWarnings("unchecked")
+		public V successor(V e)
 		{
-			Object oup = SkipList.this.successor(e);
+			V oup = (V)SkipList.this.successor((E)e);
 			if(SkipList.this.compareValues(fromElement,oup) < 0 || SkipList.this.compareValues(oup,toElement) >= 0)
 				return null;
 			return oup;
 		}		
 	}
 	
-	private class SubSet extends SubList implements SortedSet
+	private class SubSet<V> extends SubList<V> implements SortedSet<V>
 	{
 		public SubSet(Object from, Object to)
 		{
@@ -964,7 +990,7 @@ public class SkipList extends AbstractCollection implements SortedCollection
 				throw new UnsupportedOperationException("Constructed a SubSet from bounds in a nonset!");
 		}
 		
-		public SubSet(SubList s)
+		public SubSet(SubList<V> s)
 		{
 			super(s.getFromElement(),s.getToElement());
 			if(!isASet)
@@ -972,28 +998,28 @@ public class SkipList extends AbstractCollection implements SortedCollection
 				
 		}
 		
-		public SortedSet headSet(Object toElem)
+		public SortedSet<V> headSet(V toElem)
 		{
 			if(!isASet)
 				throw new UnsupportedOperationException("Called headSet on a nonset!");
-			SortedCollection c = headCollection(toElem);
-			return new SubSet((SubList)c);
+			SortedCollection<V> c = headCollection(toElem);
+			return new SubSet<V>((SubList<V>)c);
 		}
 
-		public SortedSet subSet(Object fromElem, Object toElem)
+		public SortedSet<V> subSet(V fromElem, V toElem)
 		{
 			if(!isASet)
 				throw new UnsupportedOperationException("Called headSet on a nonset!");
-			SortedCollection c = subCollection(fromElem,toElem);
-			return new SubSet((SubList)c);
+			SortedCollection<V> c = subCollection(fromElem,toElem);
+			return new SubSet<V>((SubList<V>)c);
 		}
 
-		public SortedSet tailSet(Object fromElem)
+		public SortedSet<V> tailSet(V fromElem)
 		{
 			if(!isASet)
 				throw new UnsupportedOperationException("Called headSet on a nonset!");
-			SortedCollection c = tailCollection(fromElem);
-			return new SubSet((SubList)c);
+			SortedCollection<V> c = tailCollection(fromElem);
+			return new SubSet<V>((SubList<V>)c);
 		}
 	}
         
@@ -1003,12 +1029,12 @@ public class SkipList extends AbstractCollection implements SortedCollection
     //and will attempt to throw ConcurrentModificationExceptions
    
 	//Entries should be in sorted order
-    public Iterator iterator()
+    public Iterator<E> iterator()
     {
-        return new SkipIterator();
+        return new SkipIterator<E>();
     }
     
-    private class SkipIterator implements Iterator
+    private class SkipIterator<V> implements Iterator<V>
     {
         private boolean canRemove;
         private int iteratorModCount;//used to store the modification count
@@ -1050,7 +1076,8 @@ public class SkipList extends AbstractCollection implements SortedCollection
         }
         
         //returns the next item
-        public Object next()
+        @SuppressWarnings("unchecked")
+		public V next()
         {
             if(isBad())
                 throw new ConcurrentModificationException("The iterator is invalid because the list has been modified.");
@@ -1058,7 +1085,7 @@ public class SkipList extends AbstractCollection implements SortedCollection
                 throw new NoSuchElementException("The iterator has run out of elements.");
             current = current.right;
             canRemove = true;
-            return current.value();
+            return (V)current.value();
         }
         
         
