@@ -15,6 +15,14 @@ public final class DQuad
 		this.p4 = p4;
 	}
 	
+	public DQuad()
+	{
+		this.p1 = new DPoint();
+		this.p2 = new DPoint();
+		this.p3 = new DPoint();
+		this.p4 = new DPoint();		
+	}
+	
 	public DQuad(DQuad r)
 	{
 		this(r.p1,r.p2,r.p3,r.p4);
@@ -56,6 +64,17 @@ public final class DQuad
 		throw new IllegalArgumentException("Bad n value of "+n);
 	}
 	
+	public DQuad add(DPoint p)
+	{
+		DQuad oup = new DQuad();
+		oup.p1 = p1.add(p);
+		oup.p2 = p2.add(p);
+		oup.p3 = p3.add(p);
+		oup.p4 = p4.add(p);
+		
+		return oup;
+	}
+	
 	public Iterator<DPoint> iterator()
 	{
 		return new Iterator<DPoint>(){
@@ -73,5 +92,10 @@ public final class DQuad
 				throw new UnsupportedOperationException();
 			}
 		};
-	}	
+	}
+	
+	public String toString()
+	{
+		return "( "+p1+", "+p2+", "+p3+", "+p4+" )";
+	}
 }

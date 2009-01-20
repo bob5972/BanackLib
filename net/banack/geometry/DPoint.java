@@ -16,25 +16,62 @@ public final class DPoint
 		this.y=y;
 	}
 	
-	public DPoint(Point p)
-	{
-		this.x=(double)p.x;
-		this.y=(double)p.y;
-	}
 
 	public double getX()
 	{
 		return x;
 	}
-
+	
 	public double getY()
 	{
 		return y;
+	}
+	
+	public static DPoint newPolar(double radius, double angle)
+	{
+		DPoint oup = new DPoint();
+		oup.x = radius*Math.cos(angle);
+		oup.y = radius*Math.sin(angle);
+		
+		return oup;
+	}
+		
+	
+	public double getRadius()
+	{
+		return Math.sqrt(x*x+y*y);
+	}
+	
+	public double getTheta()
+	{
+		double t= Math.atan(y/x);
+		
+		if(Double.isNaN(t))
+		{
+			if(x==0 && y==0)
+				return 0;
+			else if(y>0)
+				return Math.PI/2;
+			else
+				return 3*Math.PI/2;
+		}
+		
+		if(x<0)
+			return t+Math.PI;
+		else if(y <0)
+			return t+Math.PI*2;
+		else
+			return t;
 	}
 
 	public DPoint add(DPoint p)
 	{
 		return new DPoint(x+p.x,y+p.y);
+	}
+	
+	public DPoint subtract(DPoint p)
+	{
+		return new DPoint(x-p.x,y-p.y);
 	}
 	
 	public boolean equals(Object o)
@@ -47,6 +84,20 @@ public final class DPoint
 		
 		if(p.x == x && p.y == y)
 			return true;
+		return false;
+	}
+	
+	public boolean equals(DPoint p, double tolerance)
+	{
+		double dx= this.x-p.x;
+		double dy = this.y-p.y;
+		if(-tolerance <= dx && dx <= tolerance)
+		{
+			if(-tolerance <= dy && dy <= tolerance)
+			{
+				return true;
+			}
+		}
 		return false;
 	}
 	
