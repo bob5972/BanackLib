@@ -7,25 +7,32 @@ import java.io.PrintWriter;
 public class Debug
 {
 	private static boolean DEBUG=false;
+	private static boolean MESSAGES=false;
 	public static boolean CRASH_ON_ERROR=false;
 	
+	public static boolean STACK_TRACE_ON_VERBOSE=false;//LOTS OF OUTPUT!
 	public static boolean STACK_TRACE_ON_INFO=false;
 	public static boolean STACK_TRACE_ON_WARN=true;
 	public static boolean STACK_TRACE_ON_ERROR=true;
 	
+	
 	public static boolean STD_OUT_MESSAGES=false;
+	public static boolean STD_OUT_MESSAGES_VERBOSE=false;
 	public static boolean STD_OUT_MESSAGES_INFO=false;
 	public static boolean STD_OUT_MESSAGES_WARN=false;
 	public static boolean STD_OUT_MESSAGES_ERROR=false;
 	
 	public static boolean STD_ERR_MESSAGES=false;
+	public static boolean STD_ERR_MESSAGES_VERBOSE=false;
 	public static boolean STD_ERR_MESSAGES_INFO=false;
 	public static boolean STD_ERR_MESSAGES_WARN=true;
 	public static boolean STD_ERR_MESSAGES_ERROR=true;
 	
 	private static String LOG_FILE = "debug.log";
 
+	
 	public static boolean LOG_MESSAGES=false;
+	public static boolean LOG_MESSAGES_VERBOSE=false;
 	public static boolean LOG_MESSAGES_INFO=true;
 	public static boolean LOG_MESSAGES_WARN=true;
 	public static boolean LOG_MESSAGES_ERROR=true;
@@ -44,15 +51,45 @@ public class Debug
 		DEBUG=false;
 	}
 	
+	public static void enableMessages()
+	{
+		MESSAGES=true;
+	}
+	
+	public static void disableMessages()
+	{
+		MESSAGES=false;
+	}
+	
 	public static boolean isDebug()
 	{
 		return DEBUG;
 	}
 	
+	public static boolean showMessages()
+	{
+		return MESSAGES;
+	}
+	
+	public static boolean showWarnings()
+	{
+		return LOG_MESSAGES_WARN || STD_ERR_MESSAGES_WARN || STD_OUT_MESSAGES_WARN;
+	}
+	
+	public static boolean showErrors()
+	{
+		return LOG_MESSAGES_ERROR || STD_ERR_MESSAGES_ERROR || STD_OUT_MESSAGES_ERROR;
+	}
+	
+	public static boolean showInfo()
+	{
+		return LOG_MESSAGES_INFO || STD_ERR_MESSAGES_INFO || STD_OUT_MESSAGES_INFO;
+	}
+	
 	
 	public static void stdOutPrint(String msg)
 	{
-		if(!DEBUG)
+		if(!MESSAGES)
 			return;
 		if(STD_OUT_MESSAGES)
 		{
@@ -62,7 +99,7 @@ public class Debug
 	
 	public static void stdErrPrint(String msg)
 	{
-		if(!DEBUG)
+		if(!MESSAGES)
 			return;
 		if(STD_ERR_MESSAGES)
 			System.err.println(msg);
@@ -70,7 +107,7 @@ public class Debug
 	
 	public static void logPrint(String msg)
 	{
-		if(!DEBUG)
+		if(!MESSAGES)
 			return;
 		if(LOG_MESSAGES)
 		{
@@ -93,7 +130,7 @@ public class Debug
 	
 	public static void info(Object message)
 	{
-		if(!DEBUG)
+		if(!MESSAGES)
 			return;
 		String oup = message.toString();
 		if(STD_OUT_MESSAGES_INFO)
@@ -107,9 +144,25 @@ public class Debug
 			printStackTrace();
 	}
 	
+	public static void verbose(Object message)
+	{
+		if(!MESSAGES)
+			return;
+		String oup = message.toString();
+		if(STD_OUT_MESSAGES_VERBOSE)
+			stdOutPrint(oup);
+		if(STD_ERR_MESSAGES_VERBOSE)
+			stdErrPrint(oup);
+		if(LOG_MESSAGES_VERBOSE)
+			logPrint(oup);
+		
+		if(STACK_TRACE_ON_VERBOSE)
+			printStackTrace();
+	}
+	
 	public static void warn(Object message)
 	{
-		if(!DEBUG)
+		if(!MESSAGES)
 			return;
 		String oup = message.toString();
 		if(STD_OUT_MESSAGES_WARN)
@@ -125,7 +178,7 @@ public class Debug
 	
 	public static void error(Object message)
 	{
-		if(!DEBUG)
+		if(!MESSAGES)
 			return;
 		String oup = message.toString();
 		
