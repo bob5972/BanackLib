@@ -52,7 +52,7 @@ public class Stack<V>
 		mySize = 0;
 	}
 	
-	public Object pop()
+	public V pop()
 	{
 		if (!isEmpty())
 		{
