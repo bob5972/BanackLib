@@ -74,6 +74,21 @@ public final class DPoint
 		return new DPoint(x-p.x,y-p.y);
 	}
 	
+	public DPoint invert()
+	{
+		return new DPoint(-x,-y);
+	}
+	
+	public DPoint invertX()
+	{
+		return new DPoint(-x,y);
+	}
+	
+	public DPoint invertY()
+	{
+		return new DPoint(x,-y);
+	}
+	
 	public boolean equals(Object o)
 	{
 		if(this == o)
