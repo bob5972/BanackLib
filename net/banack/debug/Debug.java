@@ -46,6 +46,11 @@ public class Debug
 		DEBUG=true;
 	}
 	
+	public static void setDebug(boolean b)
+	{
+		DEBUG = b;
+	}
+	
 	public static void disableDebug()
 	{
 		DEBUG=false;
@@ -54,6 +59,11 @@ public class Debug
 	public static void enableMessages()
 	{
 		MESSAGES=true;
+	}
+	
+	public static void setMessages(boolean b)
+	{
+		MESSAGES=b;
 	}
 	
 	public static void disableMessages()

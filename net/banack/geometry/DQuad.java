@@ -75,6 +75,22 @@ public final class DQuad
 		return oup;
 	}
 	
+	public DQuad subtract(DPoint p)
+	{
+		DQuad oup = new DQuad();
+		oup.p1 = p1.subtract(p);
+		oup.p2 = p2.subtract(p);
+		oup.p3 = p3.subtract(p);
+		oup.p4 = p4.subtract(p);
+		
+		return oup;
+	}
+	
+	public DPoint getCenter()
+	{
+		return new DPoint((p1.getX()+p2.getX()+p3.getX()+p4.getX())/4,(p1.getY()+p2.getY()+p3.getY()+p4.getY())/4);
+	}
+	
 	public Iterator<DPoint> iterator()
 	{
 		return new Iterator<DPoint>(){

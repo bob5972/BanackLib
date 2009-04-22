@@ -4,6 +4,8 @@ public final class DPoint
 {
 	private double x,y;
 	
+	public final static DPoint ORIGIN = new DPoint(0,0);
+	
 	public DPoint()
 	{
 		x=0;
@@ -124,7 +126,7 @@ public final class DPoint
 	
 	public String toString()
 	{
-		return "( "+x+","+y+"+ )";
+		return "("+x+","+y+")";
 	}
 	
 }

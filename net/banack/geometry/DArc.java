@@ -12,6 +12,14 @@ public final class DArc
 		this.span = angleSpan;
 		this.start = angleStart;
 	}
+	
+	public DArc(DArc a)
+	{
+		this.center = a.center;
+		this.radius = a.radius;
+		this.span = a.span;
+		this.start = a.start;
+	}
 
 	public DPoint getCenter()
 	{
@@ -48,5 +56,8 @@ public final class DArc
 		return new DArc(center, radius, start+r,span);
 	}
 	
-	
+	public String toString()
+	{
+		return "("+center+", "+radius+", "+start+", "+span+")";
+	}
 }
