@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
+import net.banack.util.Stack;
+
 public class Debug
 {
 	private static boolean DEBUG=false;
@@ -38,6 +40,8 @@ public class Debug
 	public static boolean LOG_MESSAGES_ERROR=true;
 	
 	private static PrintWriter logOut;
+	
+	private static Stack<Long>  timerStack = new Stack<Long>();
 	
 	
 	
@@ -267,5 +271,20 @@ public class Debug
 		}
 		
 		System.exit(1);
+	}
+	
+	public static void pushTime()
+	{
+		timerStack.push(System.currentTimeMillis());
+	}
+	
+	public static long getElapsedTime()
+	{
+		return System.currentTimeMillis()-timerStack.top();
+	}
+	
+	public static long popElapsedTime()
+	{
+		return System.currentTimeMillis()-timerStack.pop();
 	}
 }

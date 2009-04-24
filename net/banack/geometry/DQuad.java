@@ -114,4 +114,45 @@ public final class DQuad
 	{
 		return "( "+p1+", "+p2+", "+p3+", "+p4+" )";
 	}
+	
+	public DQuad getBoundingRectangle()
+	{
+		double minx,maxx,miny,maxy;
+		minx = maxx = p1.getX();
+		miny = maxy = p1.getY();
+		
+		double cx,cy;
+		DPoint v;
+		
+		for(int x=2;x<=4;x++)
+		{
+			v = getVertex(x);
+			cx = v.getX();
+			cy = v.getY();
+			if(minx > cx)
+				minx = cx;
+			if(maxx < cx)
+				maxx = cx;
+			if(miny > cy)
+				miny = cy;
+			if(maxy < cy)
+				maxy = cy;
+		}
+		
+		return getBoundingRectangle(minx,maxx,miny,maxy);
+	}
+	
+	public static DQuad getBoundingRectangle(double minx, double maxx, double miny, double maxy)
+	{
+		DPoint p1 = new DPoint(minx,maxy);
+		DPoint p2 = new DPoint(maxx,maxy);
+		DPoint p3 = new DPoint(maxx,miny);
+		DPoint p4 = new DPoint(minx,miny);
+		return new DQuad(p1,p2,p3,p4);
+	}
+	
+	public static DQuad getBoundingRectangle(double radius)
+	{
+		return new DQuad(new DPoint(-radius,radius),new DPoint(radius,radius),new DPoint(radius,-radius),new DPoint(-radius,-radius));
+	}
 }
