@@ -6,7 +6,7 @@ package net.banack.util;
  * @author Michael Banack
  */
 
-public class Queue<V>
+public class Queue<V> implements Pile<V>
 {
 	// Instance Variables
 	ListNode<V> myTop;
@@ -69,6 +69,21 @@ public class Queue<V>
 		myTop = null;
 		mySize = 0;
 		myBottom = null;
+	}
+	
+	public final void add(V obj)
+	{
+		enqueue(obj);
+	}
+	
+	public final V peek()
+	{
+		return front();
+	}
+	
+	public final V next()
+	{
+		return dequeue();
 	}
 	
 	public String toString()

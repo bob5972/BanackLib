@@ -120,13 +120,9 @@ public class SkipList<E> extends AbstractCollection<E> implements SortedCollecti
         myComp=new NaturalComparator();
         
         isASet=false;
-        
-        if(false)
-        {
-        	//so the compiler will stop yelling at me about unused methods
-        	printList();
-        }
     }
+    
+    
     
     //Constructs an empty SkipList using the specified Comparator
     public SkipList(Comparator<E> c)
@@ -147,6 +143,26 @@ public class SkipList<E> extends AbstractCollection<E> implements SortedCollecti
     {
     	isASet=amSet;
     	addAll(list);
+    }
+    
+    public final void makeEmpty()
+    {
+    	clear();
+    }
+    
+    public void clear()
+    {
+    	mySize=0;
+    	
+    	myLevels=1;
+        
+        myTopLeft = new SkipNode(NEGATIVE_INFINITY);
+        myTopLeft.skipped = 0;
+        myTopRight = new SkipNode(POSITIVE_INFINITY);
+        myTopRight.skipped=1;
+        
+        myTopLeft.right = myTopRight;
+        myTopRight.left = myTopLeft;
     }
     	
     

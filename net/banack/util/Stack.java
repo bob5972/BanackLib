@@ -6,7 +6,7 @@ package net.banack.util;
  * @author Michael Banack
  */
 
-public class Stack<V>
+public class Stack<V> implements Pile<V>
 {
 	
 	// Instance Variables
@@ -64,6 +64,21 @@ public class Stack<V>
 		throw new EmptyStackException("Popped an Empty Stack");
 	}
 	
+	public final void add(V v)
+	{
+		push(v);
+	}
+	
+	public final V peek()
+	{
+		return top();
+	}
+	
+	public final V next()
+	{
+		return pop();
+	}
+	
 	public String toString()
 	{
 		if (mySize == 0)
@@ -106,6 +121,5 @@ public class Stack<V>
 			cur = cur.getNext();
 		}
 		return oup;
-	}
-	
+	}	
 }
