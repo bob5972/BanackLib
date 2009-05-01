@@ -76,6 +76,18 @@ public final class DPoint
 		return new DPoint(x-p.x,y-p.y);
 	}
 	
+	//subtracts d from both coordinates
+	public DPoint subtract(double d)
+	{
+		return new DPoint(x-d,y-d);
+	}
+	
+	//adds d to both coordinates
+	public DPoint add(double d)
+	{
+		return new DPoint(x+d,y+d);
+	}
+	
 	public DPoint invert()
 	{
 		return new DPoint(-x,-y);

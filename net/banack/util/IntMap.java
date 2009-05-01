@@ -16,6 +16,7 @@ public class IntMap
 	private int myFreeSpace;
 	private int tableSize;
 	private double myLoad;
+	private boolean useElementDefaults;
 	
 	private static final int SEARCH_INCR=3;
 	
@@ -41,9 +42,15 @@ public class IntMap
 		myDeletedFlags = new BitArray(tableSize);
 		myFullFlags = new BitArray(tableSize);
 		myLoad = load;
+		useElementDefaults = false;
 		
 		if(!(myLoad > 0 && myLoad <= 1))
 			throw new IllegalArgumentException("Invalid load="+load+"; load must be between 0 and 1");
+	}
+	
+	public void setUseElementDefaults(boolean b)
+	{
+		useElementDefaults = b;
 	}
 	
 	//Clears this hashtable so that it contains no keys. 
@@ -136,7 +143,11 @@ public class IntMap
 	{
 		int i = findKey(key);
 		if(i == -1)
+		{
+			if(useElementDefaults)
+				return 0;
 			throw new java.util.NoSuchElementException("Unknown key in IntMap.");
+		}
 		
 		return myValues[i];
 	}
@@ -146,6 +157,13 @@ public class IntMap
 	public int increment(int key)
 	{
 		return increment(key,1);
+	}
+	
+	//decrement given key, if the key is not present, assume  a value of 0
+	//return the new value
+	public int decrement(int key)
+	{
+		return increment(key,-1);
 	}
 	
 	//increment given key by the given amount, if the key is not present assume a value of 0
