@@ -647,7 +647,7 @@ public class SkipList<E> extends AbstractCollection<E> implements SortedCollecti
     
     public Comparator<E> comparator()
 	{
-		if(myComp instanceof NaturalComparator)
+		if(myComp instanceof NaturalComparator<?>)
 			return null;
 		else
 			return myComp;

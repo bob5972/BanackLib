@@ -46,7 +46,7 @@ public class PriorityNode<V> extends MBNode<V> implements Comparable<PriorityNod
 		// quick test for equality
 		if (this == rhs)
 			return 0;
-		if (!(rhs instanceof PriorityNode))
+		if (!(rhs instanceof PriorityNode<?>))
 			throw new ClassCastException("Invalid Comparison");
 		PriorityNode<V> prhs = (PriorityNode<V>) rhs;
 		return myPriority - prhs.myPriority;

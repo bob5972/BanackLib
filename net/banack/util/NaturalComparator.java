@@ -39,7 +39,7 @@ public final class NaturalComparator<E extends Comparable<E> > implements Compar
 		if(this==obj)
 			return true;
 		
-		if(obj instanceof NaturalComparator)
+		if(obj instanceof NaturalComparator<?>)
 		{
 			return true;
 		}
