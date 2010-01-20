@@ -28,8 +28,8 @@ public class IntMap
 	
 	private int[] myKeys;
 	private int[] myValues;
-	private BitArray myDeletedFlags;//myFlags.get(x) is true if myKeys[x] is active
-	private BitArray myFullFlags;//myFlags.get(x) is true if myKeys[x] is "full" for hashing purposes
+	private BitArray myDeletedFlags;//myDeletedFlags.get(x) is false if myKeys[x] is active
+	private BitArray myFullFlags;//myFullFlags.get(x) is true if myKeys[x] is "full" for hashing purposes
 	private int mySize;
 	private int myFreeSpace;
 	private int tableSize;
