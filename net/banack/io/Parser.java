@@ -57,31 +57,31 @@ public class Parser
 					{
 						fillChar();
 					}
-					if(nextChar == '-')
-						state =1;
-					else //isDigit(nextChar)
+					if(nextChar == '-') {
+						state = 1;
+					} else { //isDigit(nextChar)
 						state = 2;
+					}
 				break;
 				case 1: //found '-'
 					fillChar();
-					if(!isDigit(nextChar))
+					if(!isDigit(nextChar)) {
 						state=0;
-					else
-					{
+					} else {
 						state=2;
 						isNegative=true;
 					}
 				break;
 				case 2: //found #
-					while(isDigit(nextChar))
-					{
+					while(isDigit(nextChar)) {
 						oup*=10;
 						oup += nextChar - '0';
 						fillChar();
 					}
 					myInp.unread(nextChar);
-					if(isNegative)
+					if(isNegative) {
 						oup=-oup;
+					}
 				return oup;
 			}			
 		}		
