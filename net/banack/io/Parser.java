@@ -297,6 +297,43 @@ public class Parser {
         return sOup;
     }
     
+    public double readDouble() throws IOException
+    {
+        double wholeD, fracD;
+        double oup;
+        
+        int whole = readInt();
+        int frac = 0;
+        int leadingZeroes = 0;
+        int fracDigits;
+        
+        fillChar();
+        if (hasNextChar && nextChar == '.') {
+            fillChar();
+            
+            while (hasNextChar && nextChar == '0') {
+                leadingZeroes++;
+                fillChar();                
+            }
+            
+            if (hasNextChar && isDigit(nextChar)) {
+                unreadChar();
+                frac = readInt();                
+            }
+        }
+        
+        wholeD = whole;
+        fracD = frac;
+        
+        fracDigits = ((int)Math.log10(fracD) + 1);
+        fracDigits += leadingZeroes;
+        
+        fracD = fracD / Math.pow(10.0, fracDigits);        
+        
+        oup = wholeD + fracD;
+        return oup;
+    }
+    
     //This was designed for SpaceRobots, and hasn't ever been integrated...
     public static int parseInt(String text)
     {

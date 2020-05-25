@@ -51,4 +51,20 @@ public class Dumper {
     {
         myOup.write(w);
     }
+    
+    public void endLine() throws IOException
+    {
+        myOup.write("\n");
+    }
+    
+    public void writeLine(String w) throws IOException
+    {
+        myOup.write(w);
+        myOup.write("\n");
+    }
+    
+    public void flush() throws IOException
+    {
+        myOup.flush();
+    }
 }
