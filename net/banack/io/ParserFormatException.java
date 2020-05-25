@@ -1,6 +1,6 @@
 /*
  * This file is part of BanackLib.
- * Copyright (c)2011 Michael Banack <bob5972@banack.net>
+ * Copyright (c)2011 Michael Banack <github@banack.net>
  * 
  * BanackLib is free software: you can redistribute it and/or modify 
  * it under the terms of the GNU General Public License as published by

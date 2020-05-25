@@ -1,6 +1,6 @@
 /*
  * This file is part of BanackLib.
- * Copyright (c)2009 Michael Banack <bob5972@banack.net>
+ * Copyright (c)2009 Michael Banack <github@banack.net>
  * 
  * BanackLib is free software: you can redistribute it and/or modify 
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ import java.util.Date;
 /**
  * Represents an instant in time down to millisecond accuracy.
  * 
- * @author Michael Banack <bob5972@banack.net>
+ * @author Michael Banack <github@banack.net>
  */
 public class Timestamp
 {
